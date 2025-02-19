@@ -1530,6 +1530,7 @@ dependencies = [
  "r2d2_sqlite",
  "rusqlite",
  "serde",
+ "tokio",
 ]
 
 [[package]]
