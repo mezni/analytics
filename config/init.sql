@@ -185,6 +185,7 @@ CREATE INDEX IF NOT EXISTS idx_fct_roam_out_imsi_id ON fct_roam_out (imsi_id);
 CREATE INDEX IF NOT EXISTS idx_fct_roam_out_msisdn_id ON fct_roam_out (msisdn_id);
 
 CREATE TABLE IF NOT EXISTS fct_roam_in (
+    id SERIAL PRIMARY KEY,    
     date_id INT NOT NULL,
     batch_id INT NOT NULL,
     country_id INT,
@@ -196,6 +197,7 @@ CREATE TABLE IF NOT EXISTS fct_roam_in (
 CREATE INDEX IF NOT EXISTS idx_fct_roam_in_1 ON fct_roam_in (date_id, country_id, operator_id);
 
 CREATE TABLE IF NOT EXISTS fct_sor_out (
+    id SERIAL PRIMARY KEY,    
     date_id INT NOT NULL,
     batch_id INT NOT NULL,
     country_id INT,
