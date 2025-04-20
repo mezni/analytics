@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AdminLTE Premium</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Favicon -->
+  <link rel="icon" href="https://adminlte.io/wp-content/uploads/2019/01/favicon.png" type="image/x-icon">
+  
+  <!-- Local Font Awesome Icons -->
+  <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
+  
+  <!-- AdminLTE main stylesheet -->
+  <link rel="stylesheet" href="dist/css/adminlte.min.css">
+  
+  <!-- Chart.js -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.css">
+  
+  <!-- Animate.css -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+  
+  <!-- Google Fonts -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=swap">
+  
+  <!-- Custom CSS -->
+  <style>
+    :root {
+      --primary: #4e73df;
+      --success: #1cc88a;
+      --info: #36b9cc;
+      --warning: #f6c23e;
+      --danger: #e74a3b;
+      --dark: #5a5c69;
+    }
+    
+    .brand-link {
+      border-bottom: 1px solid rgba(255,255,255,.1) !important;
+    }
+    
+    .card-gradient-primary {
+      background: linear-gradient(135deg, var(--primary) 0%, #224abe 100%) !important;
+      color: white;
+    }
+    
+    .card-gradient-success {
+      background: linear-gradient(135deg, var(--success) 0%, #0d8d60 100%) !important;
+      color: white;
+    }
+    
+    .card-gradient-info {
+      background: linear-gradient(135deg, var(--info) 0%, #258391 100%) !important;
+      color: white;
+    }
+    
+    .card-gradient-warning {
+      background: linear-gradient(135deg, var(--warning) 0%, #dda20a 100%) !important;
+      color: white;
+    }
+    
+    .elevation-1 {
+      box-shadow: 0 3px 6px rgba(0,0,0,0.1), 0 3px 6px rgba(0,0,0,0.1) !important;
+    }
+    
+    .elevation-2 {
+      box-shadow: 0 4px 8px rgba(0,0,0,0.12), 0 4px 8px rgba(0,0,0,0.12) !important;
+    }
+    
+    .user-panel img {
+      transition: all 0.3s ease;
+    }
+    
+    .user-panel img:hover {
+      transform: scale(1.1);
+    }
+    
+    .progress-xs {
+      height: 5px;
+    }
+    
+    .chart-container {
+      position: relative;
+      height: 250px;
+    }
+    
+    .floating-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 1000;
+      box-shadow: 0 4px 20px rgba(0,0,0,.15);
+    }
+  </style>
+</head>
+<body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed accent-primary">
+<div class="wrapper">
+
+  <!-- Navbar -->
+  <nav class="main-header navbar navbar-expand navbar-white navbar-light border-bottom-0">
+    <!-- Left navbar links -->
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" data-widget="pushmenu" href="#"><i class="fas fa-bars"></i></a>
+      </li>
+      <li class="nav-item d-none d-sm-inline-block">
+        <a href="#" class="nav-link">Home</a>
+      </li>
+      <li class="nav-item d-none d-sm-inline-block">
+        <a href="#" class="nav-link">Contact</a>
+      </li>
+    </ul>
+
+    <!-- Right navbar -->
+    <ul class="navbar-nav ml-auto">
+      <!-- Messages Dropdown -->
+      <li class="nav-item dropdown">
+        <a class="nav-link" data-toggle="dropdown" href="#">
+          <i class="far fa-comments"></i>
+          <span class="badge badge-danger navbar-badge pulse">3</span>
+        </a>
+        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right animate__animated animate__fadeIn">
+          <a href="#" class="dropdown-item">
+            <div class="media">
+              <img src="https://randomuser.me/api/portraits/women/32.jpg" alt="User Avatar" class="img-size-50 mr-3 img-circle">
+              <div class="media-body">
+                <h3 class="dropdown-item-title">
+                  Sarah Doe
+                  <span class="float-right text-sm text-warning"><i class="fas fa-star"></i></span>
+                </h3>
+                <p class="text-sm">Can we meet tomorrow?</p>
+                <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
+              </div>
+            </div>
+          </a>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item">
+            <div class="media">
+              <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
+              <div class="media-body">
+                <h3 class="dropdown-item-title">
+                  John Smith
+                  <span class="float-right text-sm text-muted"><i class="fas fa-star"></i></span>
+                </h3>
+                <p class="text-sm">Got the report, thanks!</p>
+                <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 2 Days Ago</p>
+              </div>
+            </div>
+          </a>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
+        </div>
+      </li>
+
+      <!-- Notifications Dropdown -->
+      <li class="nav-item dropdown">
+        <a class="nav-link" data-toggle="dropdown" href="#">
+          <i class="far fa-bell"></i>
+          <span class="badge badge-warning navbar-badge pulse">5</span>
+        </a>
+        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right animate__animated animate__fadeIn">
+          <span class="dropdown-item dropdown-header">5 Notifications</span>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item">
+            <i class="fas fa-envelope mr-2"></i> 3 new messages
+            <span class="float-right text-muted text-sm">3 mins</span>
+          </a>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item">
+            <i class="fas fa-users mr-2"></i> 2 friend requests
+            <span class="float-right text-muted text-sm">12 hours</span>
+          </a>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item">
+            <i class="fas fa-file mr-2"></i> 3 new reports
+            <span class="float-right text-muted text-sm">2 days</span>
+          </a>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
+        </div>
+      </li>
+
+      <!-- User Profile Dropdown -->
+      <li class="nav-item dropdown">
+        <a class="nav-link" data-toggle="dropdown" href="#">
+          <img src="https://randomuser.me/api/portraits/men/33.jpg" alt="User Avatar" class="img-size-32 img-circle mr-1">
+          <span class="d-none d-md-inline">John Doe</span>
+        </a>
+        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right animate__animated animate__fadeIn">
+          <a href="#" class="dropdown-item text-center bg-light">
+            <img src="https://randomuser.me/api/portraits/men/33.jpg" alt="User Avatar" class="img-size-64 img-circle mb-2">
+            <h4 class="mb-0">John Doe</h4>
+            <p class="text-muted text-sm">Administrator</p>
+          </a>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item">
+            <i class="fas fa-user mr-2"></i> Profile
+          </a>
+          <a href="#" class="dropdown-item">
+            <i class="fas fa-cog mr-2"></i> Settings
+          </a>
+          <a href="#" class="dropdown-item">
+            <i class="fas fa-list-alt mr-2"></i> Activity Log
+          </a>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item">
+            <i class="fas fa-sign-out-alt mr-2"></i> Logout
+          </a>
+        </div>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- Main Sidebar -->
+  <aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <!-- Brand Logo -->
+    <a href="#" class="brand-link text-center">
+      <span class="brand-text font-weight-light">Admin<b>LTE</b> <small>Premium</small></span>
+    </a>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <!-- User Panel -->
+      <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+        <div class="image">
+          <img src="https://randomuser.me/api/portraits/men/33.jpg" class="img-circle elevation-2" alt="User Image">
+        </div>
+        <div class="info">
+          <a href="#" class="d-block">John Doe</a>
+          <small class="text-muted">Administrator</small>
+        </div>
+      </div>
+
+      <!-- Sidebar Menu -->
+      <nav class="mt-2">
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+          <!-- Dashboard -->
+          <li class="nav-item">
+            <a href="#" class="nav-link active">
+              <i class="nav-icon fas fa-tachometer-alt"></i>
+              <p>
+                Dashboard
+                <span class="right badge badge-success">New</span>
+              </p>
+            </a>
+          </li>
+
+          <!-- Analytics -->
+          <li class="nav-item has-treeview menu-open">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-chart-line"></i>
+              <p>
+                Analytics
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="far fa-circle nav-icon text-primary"></i>
+                  <p>Roam In</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="far fa-circle nav-icon text-info"></i>
+                  <p>Roam Out</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="far fa-circle nav-icon text-success"></i>
+                  <p>Traffic</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <!-- Config Menu -->
+          <li class="nav-item has-treeview">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-cogs"></i>
+              <p>
+                Configuration
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="far fa-circle nav-icon text-warning"></i>
+                  <p>Operators</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="far fa-circle nav-icon text-danger"></i>
+                  <p>Prefixes</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="far fa-circle nav-icon text-info"></i>
+                  <p>SoR Plan</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="far fa-circle nav-icon text-success"></i>
+                  <p>System Settings</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <!-- Reports -->
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-file-alt"></i>
+              <p>
+                Reports
+                <span class="badge badge-info right">6</span>
+              </p>
+            </a>
+          </li>
+
+          <!-- Divider -->
+          <li class="nav-header">SYSTEM</li>
+          
+          <!-- Users -->
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-users"></i>
+              <p>
+                Users
+              </p>
+            </a>
+          </li>
+          
+          <!-- Settings -->
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-cog"></i>
+              <p>
+                Settings
+              </p>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </aside>
+
+  <!-- Content Wrapper -->
+  <div class="content-wrapper">
+    <!-- Page Header -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0 text-dark">Dashboard</h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#"><i class="fas fa-home"></i></a></li>
+              <li class="breadcrumb-item active">Dashboard</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <section class="content">
+      <div class="container-fluid">
+        <!-- Small Boxes (Stat Boxes) -->
+        <div class="row">
+          <div class="col-lg-3 col-6">
+            <div class="small-box card-gradient-primary elevation-2">
+              <div class="inner">
+                <h3>1,254</h3>
+                <p>Roam In Sessions</p>
+              </div>
+              <div class="icon">
+                <i class="fas fa-sign-in-alt"></i>
+              </div>
+              <a href="#" class="small-box-footer">
+                More info <i class="fas fa-arrow-circle-right"></i>
+              </a>
+            </div>
+          </div>
+          
+          <div class="col-lg-3 col-6">
+            <div class="small-box card-gradient-info elevation-2">
+              <div class="inner">
+                <h3>892</h3>
+                <p>Roam Out Sessions</p>
+              </div>
+              <div class="icon">
+                <i class="fas fa-sign-out-alt"></i>
+              </div>
+              <a href="#" class="small-box-footer">
+                More info <i class="fas fa-arrow-circle-right"></i>
+              </a>
+            </div>
+          </div>
+          
+          <div class="col-lg-3 col-6">
+            <div class="small-box card-gradient-success elevation-2">
+              <div class="inner">
+                <h3>98.5<sup style="font-size: 20px">%</sup></h3>
+                <p>Success Rate</p>
+              </div>
+              <div class="icon">
+                <i class="fas fa-check-circle"></i>
+              </div>
+              <a href="#" class="small-box-footer">
+                More info <i class="fas fa-arrow-circle-right"></i>
+              </a>
+            </div>
+          </div>
+          
+          <div class="col-lg-3 col-6">
+            <div class="small-box card-gradient-warning elevation-2">
+              <div class="inner">
+                <h3>42</h3>
+                <p>Alerts</p>
+              </div>
+              <div class="icon">
+                <i class="fas fa-exclamation-triangle"></i>
+              </div>
+              <a href="#" class="small-box-footer">
+                More info <i class="fas fa-arrow-circle-right"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Main Row -->
+        <div class="row">
+          <!-- Left Column -->
+          <div class="col-lg-8">
+            <!-- Traffic Chart -->
+            <div class="card">
+              <div class="card-header border-0">
+                <div class="d-flex justify-content-between">
+                  <h3 class="card-title">Traffic Overview</h3>
+                  <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                      <i class="fas fa-minus"></i>
+                    </button>
+                    <button type="button" class="btn btn-tool" data-card-widget="remove">
+                      <i class="fas fa-times"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="chart-container">
+                  <canvas id="trafficChart" height="250"></canvas>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Recent Activity -->
+            <div class="card">
+              <div class="card-header border-0">
+                <h3 class="card-title">Recent Activity</h3>
+                <div class="card-tools">
+                  <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                    <i class="fas fa-minus"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="card-body pt-0">
+                <div class="table-responsive">
+                  <table class="table table-hover table-striped">
+                    <thead>
+                      <tr>
+                        <th>Time</th>
+                        <th>Event</th>
+                        <th>User</th>
+                        <th>Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>10 mins ago</td>
+                        <td>New roam session detected</td>
+                        <td>System</td>
+                        <td><span class="badge badge-success">Success</span></td>
+                      </tr>
+                      <tr>
+                        <td>25 mins ago</td>
+                        <td>Configuration updated</td>
+                        <td>John Doe</td>
+                        <td><span class="badge badge-info">Info</span></td>
+                      </tr>
+                      <tr>
+                        <td>1 hour ago</td>
+                        <td>Failed authentication attempt</td>
+                        <td>Unknown</td>
+                        <td><span class="badge badge-danger">Critical</span></td>
+                      </tr>
+                      <tr>
+                        <td>2 hours ago</td>
+                        <td>New report generated</td>
+                        <td>Jane Smith</td>
+                        <td><span class="badge badge-warning">Warning</span></td>
+                      </tr>
+                      <tr>
+                        <td>4 hours ago</td>
+                        <td>System backup completed</td>
+                        <td>System</td>
+                        <td><span class="badge badge-success">Success</span></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Right Column -->
+          <div class="col-lg-4">
+            <!-- Progress Bars -->
+            <div class="card">
+              <div class="card-header border-0">
+                <h3 class="card-title">System Status</h3>
+                <div class="card-tools">
+                  <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                    <i class="fas fa-minus"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="card-body pt-0">
+                <div class="mb-4">
+                  <p class="mb-1">CPU Usage <span class="float-right">65%</span></p>
+                  <div class="progress progress-xs">
+                    <div class="progress-bar bg-primary" style="width: 65%"></div>
+                  </div>
+                </div>
+                
+                <div class="mb-4">
+                  <p class="mb-1">Memory Usage <span class="float-right">42%</span></p>
+                  <div class="progress progress-xs">
+                    <div class="progress-bar bg-info" style="width: 42%"></div>
+                  </div>
+                </div>
+                
+                <div class="mb-4">
+                  <p class="mb-1">Disk Space <span class="float-right">78%</span></p>
+                  <div class="progress progress-xs">
+                    <div class="progress-bar bg-warning" style="width: 78%"></div>
+                  </div>
+                </div>
+                
+                <div class="mb-4">
+                  <p class="mb-1">Network <span class="float-right">92%</span></p>
+                  <div class="progress progress-xs">
+                    <div class="progress-bar bg-success" style="width: 92%"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Pie Chart -->
+            <div class="card">
+              <div class="card-header border-0">
+                <h3 class="card-title">Traffic Distribution</h3>
+                <div class="card-tools">
+                  <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                    <i class="fas fa-minus"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="chart-container">
+                  <canvas id="pieChart" height="250"></canvas>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Quick Actions -->
+            <div class="card">
+              <div class="card-header border-0">
+                <h3 class="card-title">Quick Actions</h3>
+              </div>
+              <div class="card-body pt-0">
+                <button class="btn btn-primary btn-block mb-2">
+                  <i class="fas fa-plus mr-2"></i> New Session
+                </button>
+                <button class="btn btn-info btn-block mb-2">
+                  <i class="fas fa-chart-bar mr-2"></i> Generate Report
+                </button>
+                <button class="btn btn-warning btn-block mb-2">
+                  <i class="fas fa-cog mr-2"></i> Settings
+                </button>
+                <button class="btn btn-danger btn-block">
+                  <i class="fas fa-bell mr-2"></i> View Alerts
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Footer -->
+  <footer class="main-footer">
+    <strong>Copyright &copy; 2025 <a href="#">AdminLTE Premium</a>.</strong>
+    All rights reserved.
+    <div class="float-right d-none d-sm-inline-block">
+      <b>Version</b> 3.1.0
+    </div>
+  </footer>
+</div>
+
+<!-- Floating Action Button -->
+<button class="btn btn-danger btn-lg rounded-circle floating-btn animate__animated animate__bounceIn">
+  <i class="fas fa-plus"></i>
+</button>
+
+<!-- Scripts -->
+<script src="plugins/jquery/jquery.min.js"></script>
+<script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="dist/js/adminlte.min.js"></script>
+<!-- Chart.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
+
+<script>
+  $(function () {
+    // Traffic Chart
+    var ctx = document.getElementById('trafficChart').getContext('2d');
+    var trafficChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+        datasets: [
+          {
+            label: 'Roam In',
+            data: [1200, 1900, 1700, 2100, 2400, 2200, 2600, 2800, 2500, 2300, 2000, 1800],
+            backgroundColor: 'rgba(78, 115, 223, 0.05)',
+            borderColor: 'rgba(78, 115, 223, 1)',
+            pointBackgroundColor: 'rgba(78, 115, 223, 1)',
+            pointBorderColor: '#fff',
+            pointHoverBackgroundColor: '#fff',
+            pointHoverBorderColor: 'rgba(78, 115, 223, 1)',
+            borderWidth: 2,
+            fill: true
+          },
+          {
+            label: 'Roam Out',
+            data: [800, 1200, 1100, 1300, 1500, 1400, 1600, 1700, 1500, 1400, 1200, 1000],
+            backgroundColor: 'rgba(54, 185, 204, 0.05)',
+            borderColor: 'rgba(54, 185, 204, 1)',
+            pointBackgroundColor: 'rgba(54, 185, 204, 1)',
+            pointBorderColor: '#fff',
+            pointHoverBackgroundColor: '#fff',
+            pointHoverBorderColor: 'rgba(54, 185, 204, 1)',
+            borderWidth: 2,
+            fill: true
+          }
+        ]
+      },
+      options: {
+        maintainAspectRatio: false,
+        responsive: true,
+        legend: {
+          position: 'top',
+        },
+        scales: {
+          yAxes: [{
+            ticks: {
+              beginAtZero: true,
+              callback: function(value) {
+                if (value >= 1000) {
+                  value /= 1000;
+                  return value + 'k';
+                }
+                return value;
+              }
+            }
+          }]
+        },
+        tooltips: {
+          callbacks: {
+            label: function(tooltipItem, data) {
+              var label = data.datasets[tooltipItem.datasetIndex].label || '';
+              if (label) {
+                label += ': ';
+              }
+              label += tooltipItem.yLabel.toLocaleString();
+              return label;
+            }
+          }
+        }
+      }
+    });
+    
+    // Pie Chart
+    var ctx2 = document.getElementById('pieChart').getContext('2d');
+    var pieChart = new Chart(ctx2, {
+      type: 'doughnut',
+      data: {
+        labels: ['Roam In', 'Roam Out', 'Local', 'International', 'Other'],
+        datasets: [{
+          data: [35, 25, 20, 15, 5],
+          backgroundColor: [
+            '#4e73df',
+            '#1cc88a',
+            '#36b9cc',
+            '#f6c23e',
+            '#e74a3b'
+          ],
+          hoverBackgroundColor: [
+            '#2e59d9',
+            '#17a673',
+            '#2c9faf',
+            '#dda20a',
+            '#be2617'
+          ],
+          hoverBorderColor: "rgba(234, 236, 244, 1)",
+        }],
+      },
+      options: {
+        maintainAspectRatio: false,
+        responsive: true,
+        cutoutPercentage: 70,
+        legend: {
+          position: 'bottom',
+        },
+        animation: {
+          animateScale: true,
+          animateRotate: true
+        }
+      },
+    });
+    
+    // Pulse animation for badges
+    setInterval(function(){
+      $('.pulse').toggleClass('badge-danger');
+    }, 1000);
+  });
+</script>
+</body>
+</html>
