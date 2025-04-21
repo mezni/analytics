@@ -1,12 +1,12 @@
 use crate::config::AppConfig;
 use crate::errors::AppError;
+use chrono::{Local, NaiveDate, NaiveDateTime, NaiveTime};
 use regex::Regex;
 use serde::{Deserialize, Serialize};
 use std::ffi::OsStr;
 use std::fs;
 use std::io::{BufRead, BufReader};
 use std::path::{Path, PathBuf};
-use chrono::{Local, NaiveDate, NaiveTime, NaiveDateTime};
 
 pub struct FileManager;
 
@@ -58,6 +58,12 @@ pub struct RoamInData {
 pub struct RoamOutData {
     metadata: Option<Metadata>,
     records: Vec<RoamOutDataRecord>,
+}
+
+#[derive(Debug)]
+pub enum ParsedData {
+    RoamIn(RoamInData),
+    RoamOut(RoamOutData),
 }
 
 impl FileManager {
@@ -124,21 +130,17 @@ impl FileManager {
         Ok(None)
     }
 
-    pub async fn execute(&self, app_config: AppConfig) -> Result<Option<RoamInData>, AppError> {
-        if let Some(file) = self.next(app_config).await? {
-            match file.file_type.as_str() {
-                "ROAM_IN" => {
-                    let result = self.roam_in_parser(file).await?;
-                    Ok(Some(result))
-                }
-                "ROAM_OUT" => {
-                    self.roam_out_parser(file).await?;
-                    Ok(None)
-                }
-                _ => Ok(None),
+    pub async fn parse_file(&self, file: FileProcessed) -> Result<Option<ParsedData>, AppError> {
+        match file.file_type.as_str() {
+            "ROAM_IN" => {
+                let result = self.roam_in_parser(file).await?;
+                Ok(Some(ParsedData::RoamIn(result)))
             }
-        } else {
-            Ok(None)
+            "ROAM_OUT" => {
+                let result = self.roam_out_parser(file).await?;
+                Ok(Some(ParsedData::RoamOut(result)))
+            }
+            _ => Ok(None),
         }
     }
 
@@ -167,25 +169,19 @@ impl FileManager {
 
             if line.starts_with("ACT") && line.contains("TIME") {
                 let parts: Vec<&str> = line.split_whitespace().collect();
-                let creation_date = if let (Some(date_str), Some(hour_str)) = (parts.get(4), parts.get(5)) {
-                    let parsed_date = NaiveDate::parse_from_str(date_str, "%y%m%d");
-                    let parsed_hour = NaiveTime::parse_from_str(hour_str, "%H%M");
-                    match (parsed_date, parsed_hour) {
-                        (Ok(date), Ok(hour)) => {
-                            NaiveDateTime::new(date, hour).format("%Y-%m-%d %H:%M:%S").to_string()
+                let creation_date =
+                    if let (Some(date_str), Some(hour_str)) = (parts.get(4), parts.get(5)) {
+                        let parsed_date = NaiveDate::parse_from_str(date_str, "%y%m%d");
+                        let parsed_hour = NaiveTime::parse_from_str(hour_str, "%H%M");
+                        match (parsed_date, parsed_hour) {
+                            (Ok(date), Ok(hour)) => NaiveDateTime::new(date, hour)
+                                .format("%Y-%m-%d %H:%M:%S")
+                                .to_string(),
+                            _ => Local::now().format("%Y-%m-%d %H:%M:%S").to_string(),
                         }
-                        _ => {
-                            println!("Warning: Invalid date or hour format. Falling back to now.");
-                            Local::now().format("%Y-%m-%d %H:%M:%S").to_string()
-                        }
-                    }
-                } else {
-                    println!(
-                        "Warning: Could not parse date and hour from metadata line: {}",
-                        line
-                    );
-                    Local::now().format("%Y-%m-%d %H:%M:%S").to_string()
-                };
+                    } else {
+                        Local::now().format("%Y-%m-%d %H:%M:%S").to_string()
+                    };
 
                 metadata = Some(Metadata { creation_date });
                 continue;
@@ -225,29 +221,12 @@ impl FileManager {
         Ok(RoamInData { metadata, records })
     }
 
-    pub async fn roam_out_parser(&self, file: FileProcessed) -> Result<(), AppError> {
+    pub async fn roam_out_parser(&self, file: FileProcessed) -> Result<RoamOutData, AppError> {
         println!("Parsing ROAM_OUT: {:?}", file.file_path);
-
-        let file = std::fs::File::open(file.file_path)?;
-        let reader = BufReader::new(file);
-        let mut records = Vec::new();
-        let mut metadata = Local::now().format("%Y-%m-%d %H:%M:%S").to_string();
-
-        for line in reader.lines() {
-            let line = line?;
-            let parts: Vec<&str> = line.split_whitespace().collect();
-            if parts.len() >= 3 {
-                records.push(RoamOutDataRecord {
-                    imsi: parts[0].to_string(),
-                    msisdn: parts[1].to_string(),
-                    vlr_number: parts[2].to_string(),
-                });
-            }
-        }
-
-        // You can return the data or process/save it here
-        println!("Parsed {} ROAM_OUT records", records.len());
-
-        Ok(())
+        let metadata = Some(Metadata {
+            creation_date: Local::now().format("%Y-%m-%d %H:%M:%S").to_string(),
+        });
+        let records = Vec::new();
+        Ok(RoamOutData { metadata, records })
     }
 }
