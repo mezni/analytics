@@ -1,12 +1,14 @@
 use crate::config::AppConfig;
 use crate::errors::AppError;
 use chrono::{Local, NaiveDate, NaiveDateTime, NaiveTime};
+use csv::ReaderBuilder;
 use regex::Regex;
 use serde::{Deserialize, Serialize};
 use std::ffi::OsStr;
 use std::fs;
 use std::io::{BufRead, BufReader};
 use std::path::{Path, PathBuf};
+use tokio::fs as tokio_fs;
 
 pub struct FileManager;
 
@@ -26,7 +28,7 @@ pub struct RoamInDataRecord {
 }
 
 #[derive(Debug, Serialize)]
-struct RoamOutDataRecord {
+pub struct RoamOutDataRecord {
     pub imsi: String,
     pub msisdn: String,
     pub vlr_number: String,
@@ -50,14 +52,14 @@ pub struct Metadata {
 
 #[derive(Debug, Serialize)]
 pub struct RoamInData {
-    pub metadata: Option<Metadata>,
+    pub metadata: Metadata,
     pub records: Vec<RoamInDataRecord>,
 }
 
 #[derive(Debug, Serialize)]
 pub struct RoamOutData {
-    metadata: Option<Metadata>,
-    records: Vec<RoamOutDataRecord>,
+    pub metadata: Metadata,
+    pub records: Vec<RoamOutDataRecord>,
 }
 
 #[derive(Debug)]
@@ -130,6 +132,11 @@ impl FileManager {
         Ok(None)
     }
 
+    pub async fn remove_file<P: AsRef<Path>>(&self, path: P) -> Result<(), AppError> {
+        tokio_fs::remove_file(&path).await?;
+        Ok(())
+    }
+
     pub async fn parse_file(&self, file: FileProcessed) -> Result<Option<ParsedData>, AppError> {
         match file.file_type.as_str() {
             "ROAM_IN" => {
@@ -151,7 +158,7 @@ impl FileManager {
         let re_row = Regex::new(r"(4-\d+)\s+(\d+)\s+(\d+)")?;
         let re_summary = Regex::new(r"([A-Z]+)\s+(\d+)")?;
 
-        let mut metadata = None;
+        let mut metadata: Option<Metadata> = None;
         let mut in_data_section = false;
         let mut records = Vec::new();
         let mut summary = SummaryRecord {
@@ -218,15 +225,56 @@ impl FileManager {
             }
         }
 
-        Ok(RoamInData { metadata, records })
+        let final_metadata = metadata.unwrap_or_else(|| Metadata {
+            creation_date: Local::now().format("%Y-%m-%d %H:%M:%S").to_string(),
+        });
+
+        Ok(RoamInData {
+            metadata: final_metadata,
+            records,
+        })
     }
 
     pub async fn roam_out_parser(&self, file: FileProcessed) -> Result<RoamOutData, AppError> {
         println!("Parsing ROAM_OUT: {:?}", file.file_path);
-        let metadata = Some(Metadata {
-            creation_date: Local::now().format("%Y-%m-%d %H:%M:%S").to_string(),
-        });
-        let records = Vec::new();
+
+        let f = std::fs::File::open(&file.file_path)?;
+        let mut rdr = ReaderBuilder::new().has_headers(true).from_reader(f);
+
+        let mut records = Vec::new();
+
+        for result in rdr.records() {
+            let record = result?;
+            let imsi = record.get(0).unwrap_or("").to_string();
+            let msisdn = record.get(1).unwrap_or("").to_string();
+            let vlr_number = record.get(2).unwrap_or("").to_string();
+
+            records.push(RoamOutDataRecord {
+                imsi,
+                msisdn,
+                vlr_number,
+            });
+        }
+
+        let filename = file
+            .file_path
+            .file_name()
+            .and_then(|name| name.to_str())
+            .unwrap_or("");
+
+        let creation_date = filename
+            .split('_')
+            .last()
+            .and_then(|part| part.strip_suffix(".txt"))
+            .and_then(|datetime_str| {
+                NaiveDateTime::parse_from_str(datetime_str, "%Y%m%d%H%M%S")
+                    .ok()
+                    .map(|dt| dt.format("%Y-%m-%d %H:%M:%S").to_string())
+            })
+            .unwrap_or_else(|| Local::now().format("%Y-%m-%d %H:%M:%S").to_string());
+
+        let metadata = Metadata { creation_date };
+
         Ok(RoamOutData { metadata, records })
     }
 }
