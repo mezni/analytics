@@ -236,8 +236,6 @@ impl FileManager {
     }
 
     pub async fn roam_out_parser(&self, file: FileProcessed) -> Result<RoamOutData, AppError> {
-        println!("Parsing ROAM_OUT: {:?}", file.file_path);
-
         let f = std::fs::File::open(&file.file_path)?;
         let mut rdr = ReaderBuilder::new().has_headers(true).from_reader(f);
 
