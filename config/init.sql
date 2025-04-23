@@ -1,8 +1,8 @@
 ----------------------
 -- Baseline
 ----------------------
-CREATE TABLE IF NOT EXISTS gloabl_config (
-    gloabl_config_id SERIAL PRIMARY KEY,
+CREATE TABLE IF NOT EXISTS global_config (
+    global_config_id SERIAL PRIMARY KEY,
     key TEXT,
     value TEXT
 );
@@ -88,7 +88,7 @@ CREATE TABLE IF NOT EXISTS prefixes (
 );
 
 CREATE TABLE IF NOT EXISTS batch_execs (
-    id SERIAL PRIMARY KEY,
+    batch_id SERIAL PRIMARY KEY,
     batch_name TEXT NOT NULL,
     source_type TEXT,
     source_name TEXT,
@@ -212,8 +212,8 @@ FROM GENERATE_SERIES(
     '1 day'::INTERVAL
 ) AS d;    
 
-INSERT INTO gloabl_config (key,value) VALUES ('home_country','Tunisia');
-INSERT INTO gloabl_config (key,value) VALUES ('home_operator','Orange');
+INSERT INTO global_config (key,value) VALUES ('home_country','Tunisia');
+INSERT INTO global_config (key,value) VALUES ('home_operator','Orange');
 INSERT INTO roam_directions (direction, description) 
 VALUES 
     ('IN', 'ROAM IN'),
@@ -255,18 +255,18 @@ JOIN countries cnt ON cnt.common_name = ldr.country
 WHERE opr.country_id = cnt.country_id;
 
 DELETE FROM prefixes
-WHERE prefix IN (
-    SELECT prefix
+WHERE prefix_id IN (
+    SELECT prefix_id
     FROM (
-        SELECT prefix,
+        SELECT prefix_id,
                ROW_NUMBER() OVER (PARTITION BY prefix ORDER BY prefix_id) AS rn
         FROM prefixes
     ) t
     WHERE t.rn > 1
 );
 
-DROP TABLE load_operators;
-DROP TABLE load_prefixes;
+-- DROP TABLE load_operators;
+-- DROP TABLE load_prefixes;
 
 
 ----------------------
@@ -380,10 +380,11 @@ CREATE INDEX idx_metrics_i1 ON metrics (date_id,country_id,operator_id);
 -- Views
 ----------------------
 create view v_roam_in_metrics as
-select ms.name as metric_type, md.name as metric_name, md.description as metric_description, pr.date_str,cn.common_name as country, op.operator, mt.value  
+select ms.name as metric_type,rd.direction, md.name as metric_name, md.description as metric_description, pr.date_str,cn.common_name as country, op.operator, mt.value  
 from metrics mt 
 join metric_definition md on mt.metric_definition_id = md.metric_definition_id
 join dates pr on pr.date_id = mt.date_id
 join metrics_type ms on ms.metric_type_id = md.metric_type_id
 left join countries cn on cn.country_id = mt.country_id
-left join operators op on op.operator_id = mt.operator_id;
+left join operators op on op.operator_id = mt.operator_id
+left join roam_directions rd on md.roam_direction_id = rd.roam_direction_id;

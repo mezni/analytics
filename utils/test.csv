@@ -73,7 +73,7 @@ BLRMD,25701,257,1,Yes,Yes,,A1,A1 Belarus,BY
 BLR02,25702,257,2,Yes,Yes,,MTS,Mobile TeleSystems,BY
 BLZ67,70267,702,67,Yes,Yes,Yes,DigiCell,Belize Telemedia Limited (BTL),BZ
 BLZSC,70269,702,69,Yes,,Yes,SMART,Speednet Communications Limited,BZ
-CANTS,302220,302,220,Yes,,Yes,Telus Mobility,Telus Mobility,CA
+CANTS,302220,302,220,Yes,,Yes,Telus Mobility, Koodo Mobile, Public Mobile",Telus Mobility,CA
 CANMC,302370,302,370,,,,Fido,Fido Solutions (Rogers Wireless),CA
 CANVT,302500,302,500,Yes,,Yes,Videotron,Videotron,CA
 CANBM,302610,302,610,Yes,,Yes,Bell Mobility,Bell Mobility,CA
@@ -601,7 +601,7 @@ UKRUM,25501,255,1,Yes,Yes,Yes,Vodafone,"PRJSC ""VF Ukraine""",UA
 UKRRS,25502,255,2,Yes,Yes,Yes,Kyivstar,"PRJSC ""Kyivstar""",UA
 UKRKS,25503,255,3,Yes,Yes,Yes,Kyivstar,"PRJSC ""Kyivstar""",UA
 UKRAS,25506,255,6,Yes,Yes,Yes,lifecell,lifecell LLC,UA
-UKRUT,25507,255,7,Yes,,,3Mob,Lycamobile Trimob LLC,UA
+UKRUT,25507,255,7,Yes,,,3Mob,Lycamobile,Trimob LLC,UA
 UGACE,64101,641,1,Yes,Yes,,Airtel,Bharti Airtel,UG
 UGAMN,64110,641,10,Yes,Yes,Yes,MTN,MTN Uganda,UG
 UGATL,64111,641,11,Yes,Yes,,Uganda Telecom,Uganda Telecom Ltd.,UG

@@ -31,7 +31,9 @@ name = "analytics-service"
 version = "0.1.0"
 dependencies = [
  "core",
+ "serde",
  "tokio",
+ "tokio-postgres",
 ]
 
 [[package]]
