@@ -57,7 +57,6 @@ pub async fn insert_batch_exec(
     Ok(batch_id)
 }
 
-
 pub async fn update_batch_status(
     db_client: &Client,
     batch_id: i32,
@@ -76,9 +75,246 @@ pub async fn update_batch_status(
 }
 
 pub async fn insert_roam_in_metrics(db_client: &Client, corr_id: i32) -> Result<(), AppError> {
+    let query_sub_global = "
+        INSERT INTO metrics (metric_definition_id, batch_id , date_id, value)
+        SELECT 
+            (SELECT metric_definition_id FROM metric_definition WHERE name = 'number_subscribers_in'),
+            stg.batch_id,
+            dat.date_id,
+            SUM(nsub) AS value
+        FROM stg_roam_in stg
+        LEFT JOIN countries cnt ON stg.country_id = cnt.country_id
+        JOIN dates dat ON stg.batch_date = dat.date_str 
+        WHERE stg.operator_id IS DISTINCT FROM (
+            SELECT operator_id FROM operators opr 
+            JOIN countries cnt ON opr.country_id = cnt.country_id
+            WHERE cnt.common_name = (SELECT value FROM global_config WHERE key='home_country')
+            AND opr.operator = (SELECT value FROM global_config WHERE key='home_operator')  
+        )
+        AND stg.batch_id = $1
+        GROUP BY stg.batch_id, dat.date_id
+    ";
+
+    db_client
+        .execute(query_sub_global, &[&corr_id])
+        .await
+        .map_err(AppError::DatabaseError)?;
+
+    let query_sub_country = "
+        INSERT INTO metrics (metric_definition_id, batch_id , date_id, country_id , value)
+        SELECT 
+            (SELECT metric_definition_id FROM metric_definition WHERE name = 'number_subscribers_in_by_country'),
+            stg.batch_id,
+            dat.date_id,
+            stg.country_id, 
+            SUM(nsub) AS value
+        FROM stg_roam_in stg
+        LEFT JOIN countries cnt ON stg.country_id = cnt.country_id
+        JOIN dates dat ON stg.batch_date = dat.date_str 
+        WHERE stg.operator_id IS DISTINCT FROM (
+            SELECT operator_id FROM operators opr 
+            JOIN countries cnt ON opr.country_id = cnt.country_id
+            WHERE cnt.common_name = (SELECT value FROM global_config WHERE key='home_country')
+            AND opr.operator = (SELECT value FROM global_config WHERE key='home_operator')  
+        )
+        AND stg.batch_id = $1
+        GROUP BY stg.batch_id, dat.date_id, stg.country_id
+    ";
+
+    db_client
+        .execute(query_sub_country, &[&corr_id])
+        .await
+        .map_err(AppError::DatabaseError)?;
+
+    let query_sub_operator = "
+        INSERT INTO metrics (metric_definition_id, batch_id , date_id, country_id, operator_id , value)
+        SELECT 
+            (SELECT metric_definition_id FROM metric_definition WHERE name = 'number_subscribers_in_by_operator'),
+            stg.batch_id,
+            dat.date_id,
+            stg.country_id, 
+            stg.operator_id,
+            SUM(nsub) AS value
+        FROM stg_roam_in stg
+        LEFT JOIN countries cnt ON stg.country_id = cnt.country_id
+        LEFT JOIN operators ope ON stg.operator_id = ope.operator_id
+        JOIN dates dat ON stg.batch_date = dat.date_str 
+        WHERE stg.operator_id IS DISTINCT FROM (
+            SELECT operator_id FROM operators opr 
+            JOIN countries cnt ON opr.country_id = cnt.country_id
+            WHERE cnt.common_name = (SELECT value FROM global_config WHERE key='home_country')
+            AND opr.operator = (SELECT value FROM global_config WHERE key='home_operator')  
+        )
+        AND stg.batch_id = $1
+        GROUP BY stg.batch_id, dat.date_id, stg.country_id, stg.operator_id
+        ";
+
+    db_client
+        .execute(query_sub_operator, &[&corr_id])
+        .await
+        .map_err(AppError::DatabaseError)?;
+
+    let query_act_global = "
+        INSERT INTO metrics (metric_definition_id, batch_id , date_id, value)
+        SELECT 
+            (SELECT metric_definition_id FROM metric_definition WHERE name = 'number_active_subscribers_in'),
+            stg.batch_id,
+            dat.date_id,
+            SUM(nsuba) AS value
+        FROM stg_roam_in stg
+        LEFT JOIN countries cnt ON stg.country_id = cnt.country_id
+        JOIN dates dat ON stg.batch_date = dat.date_str 
+        WHERE stg.operator_id IS DISTINCT FROM (
+            SELECT operator_id FROM operators opr 
+            JOIN countries cnt ON opr.country_id = cnt.country_id
+            WHERE cnt.common_name = (SELECT value FROM global_config WHERE key='home_country')
+            AND opr.operator = (SELECT value FROM global_config WHERE key='home_operator')  
+        )
+        AND stg.batch_id = $1
+        GROUP BY stg.batch_id, dat.date_id
+    ";
+
+    db_client
+        .execute(query_act_global, &[&corr_id])
+        .await
+        .map_err(AppError::DatabaseError)?;
+
+    let query_act_country = "
+        INSERT INTO metrics (metric_definition_id, batch_id , date_id, country_id , value)
+        SELECT 
+            (SELECT metric_definition_id FROM metric_definition WHERE name = 'number_active_subscribers_in_by_country'),
+            stg.batch_id,
+            dat.date_id,
+            stg.country_id, 
+            SUM(nsuba) AS value
+        FROM stg_roam_in stg
+        LEFT JOIN countries cnt ON stg.country_id = cnt.country_id
+        JOIN dates dat ON stg.batch_date = dat.date_str 
+        WHERE stg.operator_id IS DISTINCT FROM (
+            SELECT operator_id FROM operators opr 
+            JOIN countries cnt ON opr.country_id = cnt.country_id
+            WHERE cnt.common_name = (SELECT value FROM global_config WHERE key='home_country')
+            AND opr.operator = (SELECT value FROM global_config WHERE key='home_operator')  
+        )
+        AND stg.batch_id = $1
+        GROUP BY stg.batch_id, dat.date_id, stg.country_id
+    ";
+
+    db_client
+        .execute(query_act_country, &[&corr_id])
+        .await
+        .map_err(AppError::DatabaseError)?;
+
+    let query_act_operator = "
+        INSERT INTO metrics (metric_definition_id, batch_id , date_id, country_id, operator_id , value)
+        SELECT 
+            (SELECT metric_definition_id FROM metric_definition WHERE name = 'number_active_subscribers_in_by_operator'),
+            stg.batch_id,
+            dat.date_id,
+            stg.country_id, 
+            stg.operator_id,
+            SUM(nsuba) AS value
+        FROM stg_roam_in stg
+        LEFT JOIN countries cnt ON stg.country_id = cnt.country_id
+        LEFT JOIN operators ope ON stg.operator_id = ope.operator_id
+        JOIN dates dat ON stg.batch_date = dat.date_str 
+        WHERE stg.operator_id IS DISTINCT FROM (
+            SELECT operator_id FROM operators opr 
+            JOIN countries cnt ON opr.country_id = cnt.country_id
+            WHERE cnt.common_name = (SELECT value FROM global_config WHERE key='home_country')
+            AND opr.operator = (SELECT value FROM global_config WHERE key='home_operator')  
+        )
+        AND stg.batch_id = $1
+        GROUP BY stg.batch_id, dat.date_id, stg.country_id, stg.operator_id
+        ";
+
+    db_client
+        .execute(query_act_operator, &[&corr_id])
+        .await
+        .map_err(AppError::DatabaseError)?;
+
     Ok(())
 }
 
 pub async fn insert_roam_out_metrics(db_client: &Client, corr_id: i32) -> Result<(), AppError> {
+    let query_global = "
+        INSERT INTO metrics (metric_definition_id, batch_id , date_id, value)
+        SELECT 
+            (SELECT metric_definition_id FROM metric_definition WHERE name = 'number_subscribers_out'),
+            stg.batch_id,
+            dat.date_id,
+            COUNT(*) AS value
+        FROM stg_roam_out stg
+        LEFT JOIN countries cnt ON stg.country_id = cnt.country_id
+        JOIN dates dat ON stg.batch_date = dat.date_str 
+        WHERE stg.operator_id IS DISTINCT FROM (
+            SELECT operator_id FROM operators opr 
+            JOIN countries cnt ON opr.country_id = cnt.country_id
+            WHERE cnt.common_name = (SELECT value FROM global_config WHERE key='home_country')
+            AND opr.operator = (SELECT value FROM global_config WHERE key='home_operator')  
+        )
+        AND stg.batch_id = $1
+        GROUP BY stg.batch_id, dat.date_id
+    ";
+
+    db_client
+        .execute(query_global, &[&corr_id])
+        .await
+        .map_err(AppError::DatabaseError)?;
+
+    let query_country = "
+        INSERT INTO metrics (metric_definition_id, batch_id , date_id, country_id , value)
+        SELECT 
+            (SELECT metric_definition_id FROM metric_definition WHERE name = 'number_subscribers_out_by_country'),
+            stg.batch_id,
+            dat.date_id,
+            stg.country_id, 
+            COUNT(*) AS value
+        FROM stg_roam_out stg
+        LEFT JOIN countries cnt ON stg.country_id = cnt.country_id
+        JOIN dates dat ON stg.batch_date = dat.date_str 
+        WHERE stg.operator_id IS DISTINCT FROM (
+            SELECT operator_id FROM operators opr 
+            JOIN countries cnt ON opr.country_id = cnt.country_id
+            WHERE cnt.common_name = (SELECT value FROM global_config WHERE key='home_country')
+            AND opr.operator = (SELECT value FROM global_config WHERE key='home_operator')  
+        )
+        AND stg.batch_id = $1
+        GROUP BY stg.batch_id, dat.date_id, stg.country_id
+    ";
+
+    db_client
+        .execute(query_sub_country, &[&corr_id])
+        .await
+        .map_err(AppError::DatabaseError)?;
+
+    let query_operator = "
+        INSERT INTO metrics (metric_definition_id, batch_id , date_id, country_id, operator_id , value)
+        SELECT 
+            (SELECT metric_definition_id FROM metric_definition WHERE name = 'number_subscribers_out_by_operator'),
+            stg.batch_id,
+            dat.date_id,
+            stg.country_id, 
+            stg.operator_id,
+            COUNT(*) AS value
+        FROM stg_roam_out stg
+        LEFT JOIN countries cnt ON stg.country_id = cnt.country_id
+        LEFT JOIN operators ope ON stg.operator_id = ope.operator_id
+        JOIN dates dat ON stg.batch_date = dat.date_str 
+        WHERE stg.operator_id IS DISTINCT FROM (
+            SELECT operator_id FROM operators opr 
+            JOIN countries cnt ON opr.country_id = cnt.country_id
+            WHERE cnt.common_name = (SELECT value FROM global_config WHERE key='home_country')
+            AND opr.operator = (SELECT value FROM global_config WHERE key='home_operator')  
+        )
+        AND stg.batch_id = $1
+        GROUP BY stg.batch_id, dat.date_id, stg.country_id, stg.operator_id
+        ";
+
+    db_client
+        .execute(query_operator, &[&corr_id])
+        .await
+        .map_err(AppError::DatabaseError)?;
+
     Ok(())
 }
