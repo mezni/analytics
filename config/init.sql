@@ -379,7 +379,7 @@ CREATE INDEX idx_metrics_i1 ON metrics (date_id,country_id,operator_id);
 ----------------------
 -- Views
 ----------------------
-create view v_roam_in_metrics as
+create view v_metrics as
 select ms.name as metric_type,rd.direction, md.name as metric_name, md.description as metric_description, pr.date_str,cn.common_name as country, op.operator, mt.value  
 from metrics mt 
 join metric_definition md on mt.metric_definition_id = md.metric_definition_id
