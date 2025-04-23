@@ -153,7 +153,7 @@ FROFT,28801,288,1,Yes,Yes,Yes,Faroese Telecom,Faroese Telecom,FO
 FROKA,28802,288,2,Yes,Yes,Yes,Hey,Vodafone Faroe Islands,FO
 FRAF1,20801,208,1,Yes,Yes,Yes,Orange,Orange S.A.,FR
 FRAF2,20810,208,10,Yes,Yes,Yes,SFR,Altice,FR
-FRAFM,20815,208,15,Yes,,Yes,Free Mobile,Iliad,FR
+FRAFM,20815,208,15,Yes,,Yes,Free,Iliad,FR
 FRAF3,20820,208,20,Yes,Yes,Yes,Bouygues,Bouygues Telecom,FR
 GAB01,62801,628,1,Yes,Yes,Yes,Libertis,Gabon Telecom S.A.,GA
 GABTL,62802,628,2,Yes,Yes,Yes,Moov,Gabon Telecom S.A.,GA
@@ -409,6 +409,7 @@ LUXVM,27099,270,99,Yes,Yes,Yes,Orange,Orange S.A.,LU
 LVALM,24701,247,1,Yes,Yes,Yes,LMT,Latvian Mobile Telephone,LV
 LVABC,24702,247,2,Yes,Yes,Yes,Tele2,Tele2,LV
 LBY01,60601,606,1,Yes,Yes,Yes,Madar,Al-Madar Al-Jadeed,LY
+LBYLM,60600,606,00,Yes,Yes,Yes,Libyana,Libyana,LY
 MARMT,60400,604,0,Yes,Yes,Yes,Orange,Orange Morocco,MA
 MARM1,60401,604,1,Yes,Yes,Yes,IAM,Ittissalat Al-Maghrib (Maroc Telecom),MA
 MARM3,60402,604,2,,Yes,,INWI,Wana Corporate,MA
@@ -431,7 +432,9 @@ MACCT,45501,455,1,,,Yes,CTM,"Companhia de Telecomunicações de Macau, S.A.R.L."
 MACHT,45503,455,3,,Yes,,3,"Hutchison Telephone (Macau), Limitada",MO
 USAGU,310110,310,110,,Yes,Yes,IT&E Wireless,PTI Pacifica Inc.,MP
 GUMDP,310370,310,370,Yes,Yes,Yes,Docomo,NTT DoCoMo Pacific,MP
-MRTMT,60901,609,1,,Yes,,Mattel,Mattel,MR
+MRTMT,60901,609,01,,Yes,,Mattel,Mattel,MR
+MRTM1,60902,609,02,,Yes,,Chinguitel,Chinguitel,MR
+MRTM2,60910,609,10,,Yes,,Mauritel,Mauritel Mobiles,MR
 MSRCW,354860,354,860,,Yes,,FLOW,Cable & Wireless,MS
 MLTTL,27801,278,1,Yes,Yes,Yes,Vodafone,Vodafone Malta,MT
 MLTGO,27821,278,21,Yes,Yes,Yes,GO,Mobile Communications Limited,MT
@@ -479,7 +482,7 @@ NZLBS,53001,530,1,Yes,Yes,Yes,Vodafone,Vodafone New Zealand,NZ
 NZLTM,53005,530,5,Yes,,Yes,Spark,Spark New Zealand,NZ
 NZLNH,53024,530,24,Yes,,Yes,2degrees,2degrees,NZ
 OMNGT,42202,422,2,Yes,Yes,Yes,Omantel,Oman Telecommunications Company,OM
-OMNNT,42203,422,3,Yes,Yes,Yes,ooredoo,Omani Qatari Telecommunications Company SAOC,OM
+OMNNT,42203,422,3,Yes,Yes,Yes,Ooredoo,Omani Qatari Telecommunications Company SAOC,OM
 PANCW,71401,714,1,Yes,Yes,Yes,Cable & Wireless,Cable & Wireless Panama S.A.,PA
 PANCL,71403,714,3,Yes,Yes,Yes,Claro,América Móvil,PA
 PANDC,71404,714,4,Yes,Yes,Yes,Digicel,Digicel Group,PA
@@ -525,7 +528,7 @@ RUSBD,25099,250,99,Yes,Yes,Yes,Beeline,OJSC Vimpel-Communications,RU
 RWAMN,63510,635,10,Yes,Yes,,MTN,MTN Rwandacell SARL,RW
 RWATG,63513,635,13,Yes,Yes,,Airtel,Airtel RWANDA,RW
 RWAAR,63514,635,14,Yes,Yes,,Airtel,Airtel RWANDA,RW
-SAUAJ,42001,420,1,Yes,Yes,Yes,Al Jawal,Saudi Telecom Company,SA
+SAUAJ,42001,420,1,Yes,Yes,Yes,STC,Saudi Telecom Company,SA
 SAUET,42003,420,3,Yes,Yes,Yes,Mobily,Etihad Etisalat Company,SA
 SAUZN,42004,420,4,Yes,Yes,Yes,Zain,Zain Saudi Arabia,SA
 SAULB,42006,420,6,,,,Lebara Mobile,Lebara Mobile,SA

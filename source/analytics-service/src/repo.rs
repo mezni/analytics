@@ -284,7 +284,7 @@ pub async fn insert_roam_out_metrics(db_client: &Client, corr_id: i32) -> Result
     ";
 
     db_client
-        .execute(query_sub_country, &[&corr_id])
+        .execute(query_country, &[&corr_id])
         .await
         .map_err(AppError::DatabaseError)?;
 

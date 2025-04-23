@@ -1,0 +1,370 @@
+country,operator,cc,ndc,prefix
+France,Orange,33,6001,336001
+France,SFR,33,6002,336002
+France,Bouygues,33,6003,336003
+France,Zeop,33,60040,3360040
+France,Orange,33,60041,3360041
+France,Digicel Antilles Francaises Guyane,33,60042,3360042
+France,Dauphin Telecom,33,60043,3360043
+France,OUTREMER TELECOM,33,60044,3360044
+France,UTS CARAIBES,33,60045,3360045
+France,Orange,33,60051,3360051
+France,SFR,33,60052,3360052
+France,BJT,33,60053,3360053
+France,Only (Telco OI),33,60054,3360054
+France,Only (Telco OI),33,60055,3360055
+France,Free,33,6006,336006
+France,SFR,33,6007,336007
+France,Orange,33,6008,336008
+France,Bouygues,33,6009,336009
+France,SFR,33,601,33601
+France,SFR,33,602,33602
+France,SFR,33,603,33603
+France,Afone,33,6040,336040
+France,Afone,33,6041,336041
+France,e*Message,33,6042,336042
+France,e*Message,33,6043,336043
+France,Afone,33,6044,336044
+France,SFR,33,6045,336045
+France,SFR,33,6046,336046
+France,SFR,33,6047,336047
+France,SFR,33,6048,336048
+France,SFR,33,6049,336049
+France,Euroinformation Telecom,33,6050,336050
+France,Euroinformation Telecom,33,6051,336051
+France,Euroinformation Telecom,33,6052,336052
+France,Euroinformation Telecom,33,6053,336053
+France,Euroinformation Telecom,33,6054,336054
+France,Lycamobile,33,6055,336055
+France,Lycamobile,33,6056,336056
+France,Lycamobile,33,6057,336057
+France,Lycamobile,33,6058,336058
+France,Lycamobile,33,6059,336059
+France,e*Message,33,6060,336060
+France,e*Message,33,6061,336061
+France,e*Message,33,6062,336062
+France,e*Message,33,6063,336063
+France,Afone,33,6064,336064
+France,Euroinformation Telecom,33,6065,336065
+France,Euroinformation Telecom,33,6066,336066
+France,Euroinformation Telecom,33,6067,336067
+France,Euroinformation Telecom,33,6068,336068
+France,Euroinformation Telecom,33,6069,336069
+France,Orange,33,607,33607
+France,Orange,33,608,33608
+France,SFR,33,609,33609
+France,SFR,33,61,3361
+France,SFR,33,62,3362
+France,Orange,33,63,3363
+France,SFR,33,634,33634
+France,SFR,33,635,33635
+France,Euroinformation Telecom,33,636,33636
+France,Globalstar Europe,33,63800,3363800
+France,Prixtel,33,63801,3363801
+France,Prixtel,33,63802,3363802
+France,Prixtel,33,63803,3363803
+France,Prixtel,33,63804,3363804
+France,Prixtel,33,63805,3363805
+France,IP Directions,33,63806,3363806
+France,Alphalink,33,63807,3363807
+France,Alphalink,33,63808,3363808
+France,Alphalink,33,63809,3363809
+France,Orange,33,640,33640
+France,Globalstar Europe,33,64000,3364000
+France,Globalstar Europe,33,64001,3364001
+France,Globalstar Europe,33,64002,3364002
+France,Globalstar Europe,33,64003,3364003
+France,Globalstar Europe,33,64004,3364004
+France,Coriolis Telecom,33,64005,3364005
+France,Coriolis Telecom,33,64006,3364006
+France,Coriolis Telecom,33,64007,3364007
+France,Coriolis Telecom,33,64008,3364008
+France,Coriolis Telecom,33,64009,3364009
+France,La poste telecom,33,6410,336410
+France,La poste telecom,33,6411,336411
+France,La poste telecom,33,6412,336412
+France,La poste telecom,33,6413,336413
+France,La poste telecom,33,6414,336414
+France,La poste telecom,33,6415,336415
+France,Euroinformation Telecom,33,64160,3364160
+France,Euroinformation Telecom,33,64161,3364161
+France,Mobiquithings,33,64162,3364162
+France,SCT,33,64163,3364163
+France,Legos,33,64164,3364164
+France,e*Message,33,64165,3364165
+France,SFR,33,64166,3364166
+France,SFR,33,64167,3364167
+France,SFR,33,64168,3364168
+France,SFR,33,64169,3364169
+France,Orange,33,642,33642
+France,Orange,33,643,33643
+France,La poste telecom,33,6440,336440
+France,Orange,33,6441,336441
+France,Orange,33,6442,336442
+France,Orange,33,6443,336443
+France,Transatel,33,6444,336444
+France,Transatel,33,6445,336445
+France,Transatel,33,6446,336446
+France,La poste telecom,33,6447,336447
+France,La poste telecom,33,6448,336448
+France,La poste telecom,33,6449,336449
+France,Orange,33,645,33645
+France,SFR,33,646,33646
+France,Orange,33,647,33647
+France,Orange,33,648,33648
+France,Orange,33,649,33649
+France,Keyyo,33,64950,3364950
+France,Intercall,33,64990,3364990
+France,Intercall,33,64991,3364991
+France,e*Message,33,64994,3364994
+France,Prixtel,33,64995,3364995
+France,e*Message,33,64996,3364996
+France,e*Message,33,64997,3364997
+France,Prixtel,33,64998,3364998
+France,SFR,33,64999,3364999
+France,Bouygues,33,650,33650
+France,Free,33,651,33651
+France,Free,33,652,33652
+France,Bouygues,33,6530,336530
+France,Bouygues,33,6531,336531
+France,Bouygues,33,6532,336532
+France,Bouygues,33,6533,336533
+France,Bouygues,33,6534,336534
+France,Free,33,6535,336535
+France,Free,33,6536,336536
+France,Free,33,6537,336537
+France,Free,33,6538,336538
+France,Free,33,6539,336539
+France,Orange,33,654,33654
+France,SFR,33,655,33655
+France,e*Message,33,656,33656
+France,Mobiquithings,33,65660,3365660
+France,Airbus Defence and Space,33,65661,3365661
+France,Mobiquithings,33,65662,3365662
+France,Mobiquithings,33,65663,3365663
+France,Mobiquithings,33,65664,3365664
+France,Mobiquithings,33,65665,3365665
+France,Prixtel,33,65666,3365666
+France,Prixtel,33,65667,3365667
+France,Prixtel,33,65668,3365668
+France,Prixtel,33,65669,3365669
+France,La poste telecom,33,6567,336567
+France,La poste telecom,33,6568,336568
+France,e*Message,33,657,33657
+France,Bouygues,33,658,33658
+France,Bouygues,33,659,33659
+France,Bouygues,33,66,3366
+France,Orange,33,67,3367
+France,Orange,33,68,3368
+France,Free,33,695,33695
+France,Bouygues,33,698,33698
+France,Bouygues,33,699,33699
+France,Euroinformation Telecom,33,7500,337500
+France,SFR,33,7501,337501
+France,SFR,33,7502,337502
+France,SFR,33,7503,337503
+France,SFR,33,7504,337504
+France,Euroinformation Telecom,33,75050,3375050
+France,Euroinformation Telecom,33,75051,3375051
+France,Euroinformation Telecom,33,75052,3375052
+France,Euroinformation Telecom,33,75053,3375053
+France,Euroinformation Telecom,33,75057,3375057
+France,Euroinformation Telecom,33,75058,3375058
+France,Sewan communications,33,75059,3375059
+France,Orange,33,7506,337506
+France,Euroinformation Telecom,33,75060,3375060
+France,Euroinformation Telecom,33,75070,3375070
+France,Netcom Group,33,75071,3375071
+France,Netcom Group,33,75072,3375072
+France,Alphalink,33,75073,3375073
+France,Alphalink,33,75074,3375074
+France,Alphalink,33,75075,3375075
+France,Globalstar Europe,33,75076,3375076
+France,Globalstar Europe,33,75077,3375077
+France,Bouygues,33,75078,3375078
+France,Bouygues,33,75079,3375079
+France,SFR,33,7508,337508
+France,SFR,33,7509,337509
+France,Lycamobile,33,751,33751
+France,SFR,33,7516,337516
+France,Completel,33,7517,337517
+France,Lebara France Limited,33,7518,337518
+France,Lebara France Limited,33,7519,337519
+France,Prixtel,33,75202,3375202
+France,Prixtel,33,75203,3375203
+France,Prixtel,33,75204,3375204
+France,Prixtel,33,75205,3375205
+France,Prixtel,33,75206,3375206
+France,Prixtel,33,75207,3375207
+France,Prixtel,33,75208,3375208
+France,Prixtel,33,75209,3375209
+France,Lebara France Limited,33,7521,337521
+France,Lebara France Limited,33,7522,337522
+France,Lebara France Limited,33,7523,337523
+France,Lebara France Limited,33,7524,337524
+France,Lebara France Limited,33,7525,337525
+France,SFR,33,7526,337526
+France,Lebara France Limited,33,7527,337527
+France,Lebara France Limited,33,7528,337528
+France,Lebara France Limited,33,7529,337529
+France,Lycamobile,33,753,33753
+France,Lebara France Limited,33,7540,337540
+France,Lebara France Limited,33,7541,337541
+France,Lebara France Limited,33,7542,337542
+France,Prixtel,33,7543,337543
+France,TDF,33,75430,3375430
+France,Legos,33,75431,3375431
+France,Euroinformation Telecom,33,75432,3375432
+France,SFR,33,75433,3375433
+France,Lebara France Limited,33,7544,337544
+France,Lebara France Limited,33,7545,337545
+France,Mobiquithings,33,7546,337546
+France,ACN Communications,33,7547,337547
+France,Completel,33,7548,337548
+France,Completel,33,7549,337549
+France,Lebara France Limited,33,755,33755
+France,Legos,33,75550,3375550
+France,Legos,33,75551,3375551
+France,Legos,33,75552,3375552
+France,Legos,33,75553,3375553
+France,Legos,33,75554,3375554
+France,Euroinformation Telecom,33,75555,3375555
+France,Intercall,33,75556,3375556
+France,Intercall,33,75557,3375557
+France,Sewan communications,33,75558,3375558
+France,Sewan communications,33,75559,3375559
+France,Prixtel,33,75560,3375560
+France,Prixtel,33,75561,3375561
+France,Prixtel,33,75562,3375562
+France,Prixtel,33,75563,3375563
+France,Prixtel,33,75564,3375564
+France,Sewan communications,33,75565,3375565
+France,Euroinformation Telecom,33,75566,3375566
+France,Euroinformation Telecom,33,75567,3375567
+France,Euroinformation Telecom,33,75568,3375568
+France,Axialys,33,75569,3375569
+France,Euroinformation Telecom,33,7560,337560
+France,Euroinformation Telecom,33,7561,337561
+France,Euroinformation Telecom,33,7562,337562
+France,Euroinformation Telecom,33,75630,3375630
+France,Euroinformation Telecom,33,75631,3375631
+France,Euroinformation Telecom,33,75632,3375632
+France,Euroinformation Telecom,33,75633,3375633
+France,Euroinformation Telecom,33,75634,3375634
+France,SFR,33,75644,3375644
+France,SFR,33,75645,3375645
+France,Transatel,33,7565,337565
+France,Transatel,33,7566,337566
+France,Transatel,33,7567,337567
+France,Transatel,33,7568,337568
+France,Transatel,33,7569,337569
+France,Sewan communications,33,75700,3375700
+France,Mobiweb telecom limited,33,75701,3375701
+France,Mobiweb telecom limited,33,75702,3375702
+France,Mobiweb telecom limited,33,75703,3375703
+France,Mobiweb telecom limited,33,75704,3375704
+France,Mobiweb telecom limited,33,75705,3375705
+France,Nordnet,33,75706,3375706
+France,Keyyo,33,75707,3375707
+France,SFR,33,75708,3375708
+France,SFR,33,75709,3375709
+France,SFR,33,75710,3375710
+France,SFR,33,75711,3375711
+France,SFR,33,75712,3375712
+France,SFR,33,75714,3375714
+France,AIF,33,75715,3375715
+France,Keyyo,33,75717,3375717
+France,Orange,33,75719,3375719
+France,Mobiquithings,33,7572,337572
+France,Mobiquithings,33,7573,337573
+France,Coriolis Telecom,33,7574,337574
+France,Coriolis Telecom,33,7575,337575
+France,Euroinformation Telecom,33,75757,3375757
+France,Euroinformation Telecom,33,75758,3375758
+France,Twilio Ireland Limited,33,75759,3375759
+France,Twilio Ireland Limited,33,75760,3375760
+France,SFR,33,75761,3375761
+France,Euroinformation Telecom,33,75763,3375763
+France,Bouygues,33,75764,3375764
+France,Bouygues,33,75765,3375765
+France,Euroinformation Telecom,33,75767,3375767
+France,SFR,33,75770,3375770
+France,SFR,33,75771,3375771
+France,SFR,33,75772,3375772
+France,SFR,33,75773,3375773
+France,SFR,33,75774,3375774
+France,Euroinformation Telecom,33,75777,3375777
+France,SFR,33,75778,3375778
+France,Halys,33,75779,3375779
+France,Orange,33,75786,3375786
+France,Euroinformation Telecom,33,75787,3375787
+France,BJT,33,75788,3375788
+France,BJT,33,75789,3375789
+France,Legos,33,7579,337579
+France,Lycamobile,33,758,33758
+France,Vectone mobile,33,759,33759
+France,Bouygues,33,76,3376
+France,Free,33,766,33766
+France,Free,33,767,33767
+France,Free,33,768,33768
+France,Free,33,769,33769
+France,Orange,33,7700,337700
+France,Orange,33,7701,337701
+France,Orange,33,7702,337702
+France,SFR,33,7703,337703
+France,SFR,33,7704,337704
+France,Euroinformation Telecom,33,7705,337705
+France,Euroinformation Telecom,33,7706,337706
+France,Euroinformation Telecom,33,7707,337707
+France,Euroinformation Telecom,33,7708,337708
+France,Euroinformation Telecom,33,7709,337709
+France,Euroinformation Telecom,33,7710,337710
+France,Euroinformation Telecom,33,7711,337711
+France,Euroinformation Telecom,33,7712,337712
+France,SFR,33,7713,337713
+France,SFR,33,7714,337714
+France,SFR,33,77150,3377150
+France,SFR,33,77151,3377151
+France,SFR,33,77152,3377152
+France,SFR,33,77153,3377153
+France,SFR,33,77154,3377154
+France,Euroinformation Telecom,33,77155,3377155
+France,Euroinformation Telecom,33,77156,3377156
+France,Euroinformation Telecom,33,77157,3377157
+France,Euroinformation Telecom,33,77158,3377158
+France,Euroinformation Telecom,33,77159,3377159
+France,Euroinformation Telecom,33,7716,337716
+France,Euroinformation Telecom,33,7717,337717
+France,Euroinformation Telecom,33,7718,337718
+France,Euroinformation Telecom,33,77190,3377190
+France,Euroinformation Telecom,33,77191,3377191
+France,Euroinformation Telecom,33,77192,3377192
+France,Euroinformation Telecom,33,77193,3377193
+France,Euroinformation Telecom,33,77194,3377194
+France,Orange,33,772,33772
+France,Syma mobile,33,773,33773
+France,Syma mobile,33,774,33774
+France,SFR,33,7750,337750
+France,SFR,33,7751,337751
+France,SFR,33,7752,337752
+France,SFR,33,7753,337753
+France,SFR,33,7754,337754
+France,Mobiquithings,33,7755,337755
+France,Mobiquithings,33,7756,337756
+France,Free,33,7757,337757
+France,SFR,33,776,33776
+France,SFR,33,777,33777
+France,SFR,33,778,33778
+France,SFR,33,779,33779
+France,Orange,33,78,3378
+France,Afone,33,780,33780
+France,Lebara France Limited,33,7807,337807
+France,Lebara France Limited,33,7808,337808
+France,Onoff telecom,33,7809,337809
+France,Free,33,781,33781
+France,Free,33,782,33782
+France,Free,33,783,33783
+France,La poste telecom,33,7846,337846
+France,La poste telecom,33,7847,337847
+France,La poste telecom,33,7848,337848
+France,Euroinformation Telecom,33,7849,337849
