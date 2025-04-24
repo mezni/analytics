@@ -100,7 +100,7 @@ impl FileManager {
                     }
 
                     files_vec.sort_by_key(|entry| entry.file_name());
-                    println!("{:?}",files_vec);
+                    println!("{:?}", files_vec);
 
                     if let Some(first_file) = files_vec.first() {
                         let post_action_upper = source
