@@ -100,7 +100,6 @@ impl FileManager {
                     }
 
                     files_vec.sort_by_key(|entry| entry.file_name());
-                    println!("{:?}", files_vec);
 
                     if let Some(first_file) = files_vec.first() {
                         let post_action_upper = source
@@ -159,7 +158,7 @@ impl FileManager {
         let re_row = Regex::new(r"(4-\d+)\s+(\d+)\s+(\d+)")?;
         let re_summary = Regex::new(r"([A-Z]+)\s+(\d+)")?;
 
-        let mut metadata: Option<Metadata> = None;
+        let mut creation_date: Option<String> = None;
         let mut in_data_section = false;
         let mut records = Vec::new();
         let mut summary = SummaryRecord {
@@ -177,21 +176,14 @@ impl FileManager {
 
             if line.starts_with("ACT") && line.contains("TIME") {
                 let parts: Vec<&str> = line.split_whitespace().collect();
-                let creation_date =
-                    if let (Some(date_str), Some(hour_str)) = (parts.get(4), parts.get(5)) {
-                        let parsed_date = NaiveDate::parse_from_str(date_str, "%y%m%d");
-                        let parsed_hour = NaiveTime::parse_from_str(hour_str, "%H%M");
-                        match (parsed_date, parsed_hour) {
-                            (Ok(date), Ok(hour)) => NaiveDateTime::new(date, hour)
-                                .format("%Y-%m-%d %H:%M:%S")
-                                .to_string(),
-                            _ => Local::now().format("%Y-%m-%d %H:%M:%S").to_string(),
-                        }
-                    } else {
-                        Local::now().format("%Y-%m-%d %H:%M:%S").to_string()
-                    };
-
-                metadata = Some(Metadata { creation_date });
+                creation_date = Some(if let Some(date_str) = parts.get(4) {
+                    match NaiveDate::parse_from_str(date_str, "%Y%m%d") {
+                        Ok(date) => date.format("%Y-%m-%d").to_string(),
+                        Err(_) => Local::now().format("%Y-%m-%d").to_string(),
+                    }
+                } else {
+                    Local::now().format("%Y-%m-%d").to_string()
+                });
                 continue;
             }
 
@@ -226,14 +218,11 @@ impl FileManager {
             }
         }
 
-        let final_metadata = metadata.unwrap_or_else(|| Metadata {
-            creation_date: Local::now().format("%Y-%m-%d %H:%M:%S").to_string(),
-        });
-
-        Ok(RoamInData {
-            metadata: final_metadata,
-            records,
-        })
+        let metadata = Metadata {
+            creation_date: creation_date
+                .unwrap_or_else(|| Local::now().format("%Y-%m-%d").to_string()),
+        };
+        Ok(RoamInData { metadata, records })
     }
 
     pub async fn roam_out_parser(&self, file: FileProcessed) -> Result<RoamOutData, AppError> {
