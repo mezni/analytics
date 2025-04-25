@@ -153,6 +153,18 @@ CREATE TABLE IF NOT EXISTS stg_roam_in (
     operator_id INT
 );
 
+CREATE TABLE IF NOT EXISTS sor_plan_config (
+    id SERIAL PRIMARY KEY,
+    country_id INT NOT NULL,
+    operator_id INT NOT NULL,
+    rate TEXT,
+    routage TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    created_by TEXT,
+    updated_at TIMESTAMP,
+    updated_by TEXT
+);
+
 CREATE TABLE IF NOT EXISTS load_operators (
     id           SERIAL PRIMARY KEY,
     tadig        TEXT,
@@ -178,6 +190,15 @@ CREATE TABLE IF NOT EXISTS load_prefixes (
     created_by TEXT DEFAULT 'system'
 );
 
+CREATE TABLE IF NOT EXISTS load_sor_plan (
+    id SERIAL PRIMARY KEY,
+    country TEXT,
+    operator TEXT,
+    rate TEXT,
+    routage TEXT,
+    created_by TEXT DEFAULT 'system'
+);
+
 COPY countries (iso,common_name,name_en,name_fr,prefix,prefix_flag)
 FROM '/countries.csv'
 DELIMITER ',' CSV HEADER;
@@ -190,6 +211,9 @@ COPY load_prefixes (country, operator, cc, ndc, prefix)
 FROM '/prefixes.csv'
 DELIMITER ',' CSV HEADER;
 
+COPY load_sor_plan (country, operator, rate, routage)
+FROM '/sor_plan.csv'
+DELIMITER ',' CSV HEADER;
 
 INSERT INTO dates (
     date, year, quarter, month, day, day_of_week, day_name,
@@ -265,9 +289,15 @@ WHERE prefix_id IN (
     WHERE t.rn > 1
 );
 
+insert INTO sor_plan_config (country_id, operator_id, rate, routage)
+SELECT ope.country_id, ope.operator_id, fct.rate, fct.routage
+from load_sor_plan fct JOIN countries ctn ON fct.country = ctn.common_name
+JOIN operators ope ON fct.operator = ope.operator
+WHERE ctn.country_id = ope.country_id;
+
 -- DROP TABLE load_operators;
 -- DROP TABLE load_prefixes;
-
+-- DROP TABLE load_sor_plan;
 
 ----------------------
 -- Business
