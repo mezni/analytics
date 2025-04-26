@@ -131,6 +131,17 @@ CREATE TABLE metrics (
     value INTEGER 
 );
 
+CREATE TABLE IF NOT EXISTS roam_out_perf (
+    roam_out_perf_id SERIAL PRIMARY KEY,    
+    date_id INT NOT NULL,
+    batch_id INT NOT NULL,
+    country_id INT,
+    operator_id INT,
+    country_count INT NOT NULL,
+    operator_count INT NOT NULL,
+    percent REAL
+);
+
 CREATE TABLE IF NOT EXISTS stg_roam_out (
     batch_id INT NOT NULL,
     batch_date TEXT NOT NULL,
@@ -163,6 +174,26 @@ CREATE TABLE IF NOT EXISTS sor_plan_config (
     created_by TEXT,
     updated_at TIMESTAMP,
     updated_by TEXT
+);
+
+CREATE TABLE IF NOT EXISTS rules (
+    id SERIAL PRIMARY KEY,
+    name TEXT,
+    description TEXT,
+    is_active BOOLEAN,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    created_by TEXT,
+    updated_at TIMESTAMPTZ,
+    updated_by TEXT
+);
+
+CREATE TABLE IF NOT EXISTS notifications (
+    id SERIAL PRIMARY KEY,
+    date_id INT,
+    batch_id INT,
+    rule_id INT,
+    ref_id INT,
+    message TEXT
 );
 
 CREATE TABLE IF NOT EXISTS load_operators (
@@ -401,6 +432,11 @@ FROM roam_directions rd
 CROSS JOIN metrics_type mt
 WHERE rd.direction = 'OUT' AND mt.name = 'OPERATOR';
 
+INSERT INTO rules (name , description, is_active) VALUES ('imsi_is_not_local','IMSI non local',TRUE);
+INSERT INTO rules (name , description, is_active) VALUES ('local_vlr_number','vlr_number Local ',TRUE);
+INSERT INTO rules (name , description, is_active) VALUES ('sor_plan_bar','Barring operator',TRUE);
+INSERT INTO rules (name , description, is_active) VALUES ('sor_plan_deviation','Deviation SoR',TRUE);
+
 ----------------------
 -- Indexes
 ----------------------
@@ -418,3 +454,27 @@ join metrics_type ms on ms.metric_type_id = md.metric_type_id
 left join countries cn on cn.country_id = mt.country_id
 left join operators op on op.operator_id = mt.operator_id
 left join roam_directions rd on md.roam_direction_id = rd.roam_direction_id;
+
+
+CREATE OR REPLACE VIEW v_roam_out_perf AS
+    SELECT 
+        agg.date_id, 
+        agg.batch_id, 
+        (SELECT id FROM rules WHERE name = 'sor_plan_deviation') AS rule_id, 
+        agg.roam_out_perf_id AS ref_id,
+        CAST(pln.rate AS FLOAT) AS perct_configure,
+        agg.percent AS perct_reel,
+        ope.operator,
+        cnt.common_name
+    FROM (
+        SELECT *
+        FROM roam_out_perf fct
+        WHERE country_id IN (SELECT country_id FROM sor_plan_config)
+    ) agg
+    LEFT JOIN sor_plan_config pln 
+        ON agg.country_id = pln.country_id 
+       AND agg.operator_id = pln.operator_id
+    JOIN operators ope 
+        ON pln.operator_id = ope.operator_id
+    JOIN countries cnt ON agg.country_id = cnt.country_id 
+    ORDER by cnt.common_name, ope.operator;

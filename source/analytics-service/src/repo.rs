@@ -318,3 +318,87 @@ pub async fn insert_roam_out_metrics(db_client: &Client, corr_id: i32) -> Result
 
     Ok(())
 }
+
+
+
+
+pub async fn insert_roam_out_perfs(db_client: &Client, corr_id: i32) -> Result<(), AppError> {
+    let query_global = "
+        INSERT INTO roam_out_perf (date_id, batch_id, country_id, operator_id, country_count, operator_count, percent)
+        SELECT
+            d.date_id,
+            t.batch_id,    
+            t.country_id,
+            t.operator_id,
+            COUNT(*) AS count_by_country_operator,
+            c.total_by_country,
+            ROUND(100.0 * COUNT(*) / c.total_by_country, 2) AS percentage
+        FROM stg_roam_out t
+        JOIN (
+            SELECT country_id, COUNT(*) AS total_by_country
+            FROM stg_roam_out
+            WHERE batch_id = $1
+            GROUP BY country_id
+        ) c ON t.country_id = c.country_id
+        JOIN dates d ON t.batch_date = d.date_str
+        WHERE t.batch_id = $1
+        GROUP BY  d.date_id,t.batch_id, t.country_id, t.operator_id, c.total_by_country
+        ORDER BY  d.date_id,t.batch_id, t.country_id, t.operator_id
+    ";
+
+    db_client
+        .execute(query_global, &[&corr_id])
+        .await
+        .map_err(AppError::DatabaseError)?;
+
+
+        let query_notif = "
+            INSERT INTO notifications (date_id, batch_id, rule_id, ref_id, message) 
+            SELECT date_id, batch_id, rule_id, ref_id, 
+                '- ' || operator || ' ('|| common_name ||') config=' || perct_configure || ' reel=' || perct_reel 
+            FROM v_roam_out_perf agg
+            WHERE agg.batch_id = $1
+            AND agg.perct_reel NOT BETWEEN COALESCE(perct_configure::float, 0) - 2 
+                                    AND COALESCE(perct_configure::float, 0) + 2
+            ORDER by agg.common_name, agg.operator 
+    ";
+
+    db_client
+        .execute(query_notif, &[&corr_id])
+        .await
+        .map_err(AppError::DatabaseError)?;
+
+
+    Ok(())
+}
+
+pub async fn cleanup_roam_out_stg(db_client: &Client, corr_id: i32) -> Result<(), AppError> {
+
+        let query = "
+            DELETE FROM stg_roam_out WHERE batch_id = $1 
+    ";
+
+    db_client
+        .execute(query, &[&corr_id])
+        .await
+        .map_err(AppError::DatabaseError)?;
+
+
+    Ok(())
+}
+
+
+pub async fn cleanup_roam_in_stg(db_client: &Client, corr_id: i32) -> Result<(), AppError> {
+
+    let query = "
+        DELETE FROM stg_roam_in WHERE batch_id = $1 
+";
+
+db_client
+    .execute(query, &[&corr_id])
+    .await
+    .map_err(AppError::DatabaseError)?;
+
+
+Ok(())
+}
