@@ -1,55 +1,46 @@
-$(document).ready(function() {
-  // API configuration
+$(document).ready(function () {
   const API_BASE = 'http://localhost:3000/api/v1';
   const METRICS_ENDPOINT = '/metrics';
-  
-  // Chart instances
+
   const charts = {
-    historical: null,
-    roamIn: null,
-    roamOut: null
+    historical: null
   };
 
-  // Format number with commas
   function formatNumber(num) {
     return num ? num.toLocaleString() : 'N/A';
   }
 
-  // Format date (short format like "Apr 15")
   function formatChartDate(dateString) {
     if (!dateString) return '';
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
   }
 
-  // Format date (long format)
   function formatDate(dateString) {
     if (!dateString) return '';
     const options = { year: 'numeric', month: 'short', day: 'numeric' };
     return new Date(dateString).toLocaleDateString(undefined, options);
   }
 
-  // Calculate percentage
   function calculatePercentage(count, total) {
     return total > 0 ? Math.round((count / total) * 100) : 0;
   }
 
-  // Create horizontal progress bars
   function createProgressBars(containerId, data, total, direction) {
     const $container = $(`#${containerId}`);
     $container.empty();
-    
+
     if (!data || data.length === 0) {
       $container.html('<div class="alert alert-info">No data available</div>');
       return;
     }
-    
+
     data.sort((a, b) => b.count - a.count);
-    
+
     data.forEach(item => {
       const percentage = calculatePercentage(item.count, total);
       const barClass = direction === 'totin' ? 'bg-primary' : 'bg-info';
-      
+
       $container.append(`
         <div class="mb-4">
           <p class="mb-1">
@@ -70,60 +61,102 @@ $(document).ready(function() {
     });
   }
 
-  // Initialize historical chart
+  // 1. Roam In Total Global
+  async function fetchRoamInTotalGlobal() {
+    return fetchData(`${API_BASE}${METRICS_ENDPOINT}?direction=totin&dimensions=global`);
+  }
+
+  // 2. Roam In Active Global
+  async function fetchRoamInActiveGlobal() {
+    return fetchData(`${API_BASE}${METRICS_ENDPOINT}?direction=actin&dimensions=global`);
+  }
+
+  // 3. Roam Out Global
+  async function fetchRoamOutGlobal() {
+    return fetchData(`${API_BASE}${METRICS_ENDPOINT}?direction=out&dimensions=global`);
+  }
+
+  // 4. Top Roam In by Country
+  async function fetchTopRoamInByCountry() {
+    return fetchData(`${API_BASE}${METRICS_ENDPOINT}?direction=totin&dimensions=country&limit=5`);
+  }
+
+  // 5. Top Roam Out by Country
+  async function fetchTopRoamOutByCountry() {
+    return fetchData(`${API_BASE}${METRICS_ENDPOINT}?direction=out&dimensions=country&limit=5`);
+  }
+
+  // 6. History Roam In Total
+  async function fetchHistoryRoamInTotal() {
+    return fetchData(`${API_BASE}${METRICS_ENDPOINT}?direction=totin&dimensions=global&kind=history`);
+  }
+
+  // 7. History Roam In Active
+  async function fetchHistoryRoamInActive() {
+    return fetchData(`${API_BASE}${METRICS_ENDPOINT}?direction=actin&dimensions=global&kind=history`);
+  }
+
+  // 8. History Roam In by Country
+  async function fetchHistoryRoamInByCountry() {
+    return fetchData(`${API_BASE}${METRICS_ENDPOINT}?direction=totin&dimensions=country&kind=history`);
+  }
+
+  // 9. History Roam In by Operator
+  async function fetchHistoryRoamInByOperator() {
+    return fetchData(`${API_BASE}${METRICS_ENDPOINT}?direction=totin&dimensions=operator&kind=history`);
+  }
+
+  // 10. History Roam Out by Country
+  async function fetchHistoryRoamOutByCountry() {
+    return fetchData(`${API_BASE}${METRICS_ENDPOINT}?direction=out&dimensions=country&kind=history`);
+  }
+
+  // 11. History Roam Out by Operator
+  async function fetchHistoryRoamOutByOperator() {
+    return fetchData(`${API_BASE}${METRICS_ENDPOINT}?direction=out&dimensions=operator&kind=history`);
+  }
+
+  // Generic fetch function
+  async function fetchData(url) {
+    const response = await fetch(url);
+    if (!response.ok) throw new Error(`Failed to fetch from ${url}`);
+    const result = await response.json();
+    return result.data || [];
+  }
+
   async function initHistoricalChart() {
     try {
-      // Fetch both total and active data in parallel
-      const [totalResponse, activeResponse] = await Promise.all([
-        fetch(`${API_BASE}${METRICS_ENDPOINT}?direction=totin&dimensions=global&kind=history`),
-        fetch(`${API_BASE}${METRICS_ENDPOINT}?direction=actin&dimensions=global&kind=history`)
+      const [total, active] = await Promise.all([
+        fetchHistoryRoamInTotal(),
+        fetchHistoryRoamInActive()
       ]);
 
-      if (!totalResponse.ok || !activeResponse.ok) {
-        throw new Error('Failed to fetch historical data');
-      }
-
-      const totalData = await totalResponse.json();
-      const activeData = await activeResponse.json();
-
-      const dates = totalData.data.map(item => formatChartDate(item.date));
-      const totalCounts = totalData.data.map(item => item.count);
-      const activeCounts = activeData.data.map(item => item.count);
+      const labels = total.map(item => formatChartDate(item.date));
+      const totalCounts = total.map(item => item.count);
+      const activeCounts = active.map(item => item.count);
 
       const ctx = document.getElementById('historicalChart').getContext('2d');
-      
-      // Destroy previous chart if exists
-      if (charts.historical) {
-        charts.historical.destroy();
-      }
+      if (charts.historical) charts.historical.destroy();
 
       charts.historical = new Chart(ctx, {
         type: 'line',
         data: {
-          labels: dates,
+          labels: labels,
           datasets: [
             {
               label: 'Total Roam In',
               data: totalCounts,
-              backgroundColor: 'rgba(78, 115, 223, 0.1)',
               borderColor: 'rgba(78, 115, 223, 1)',
-              borderWidth: 2,
+              backgroundColor: 'rgba(78, 115, 223, 0.1)',
               pointBackgroundColor: '#4e73df',
-              pointBorderColor: '#fff',
-              pointRadius: 4,
-              pointHoverRadius: 6,
               fill: true
             },
             {
               label: 'Active Roam In',
               data: activeCounts,
-              backgroundColor: 'rgba(54, 185, 204, 0.1)',
               borderColor: 'rgba(54, 185, 204, 1)',
-              borderWidth: 2,
+              backgroundColor: 'rgba(54, 185, 204, 0.1)',
               pointBackgroundColor: '#36b9cc',
-              pointBorderColor: '#fff',
-              pointRadius: 4,
-              pointHoverRadius: 6,
               fill: true
             }
           ]
@@ -135,21 +168,19 @@ $(document).ready(function() {
             y: {
               beginAtZero: false,
               ticks: {
-                callback: function(value) {
+                callback: function (value) {
                   return value.toLocaleString();
                 }
               }
             },
             x: {
-              grid: {
-                display: false
-              }
+              grid: { display: false }
             }
           },
           plugins: {
             tooltip: {
               callbacks: {
-                label: function(context) {
+                label: function (context) {
                   return `${context.dataset.label}: ${context.raw.toLocaleString()}`;
                 }
               }
@@ -157,126 +188,100 @@ $(document).ready(function() {
           }
         }
       });
-    } catch (error) {
-      console.error('Error initializing historical chart:', error);
-      $('#historicalChart').closest('.card-body').html(
-        '<div class="alert alert-danger">Failed to load historical data</div>'
-      );
+    } catch (err) {
+      console.error('Error initializing historical chart:', err);
     }
   }
 
-  // Fetch metrics data
-  async function fetchMetrics(direction, elementId) {
+  async function fetchAndRenderMetric(fetchFn, elementId) {
     try {
-      const response = await fetch(`${API_BASE}${METRICS_ENDPOINT}?direction=${direction}&dimensions=global`);
-      
-      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-      
-      const data = await response.json();
-      
-      if (data.data?.length > 0) {
-        const metric = data.data[0];
-        $(`#${elementId}-count`).text(formatNumber(metric.count));
-        $(`#${elementId}-date`).text(`as of ${formatDate(metric.date)}`);
-        return metric.count;
+      const data = await fetchFn();
+      if (data.length > 0) {
+        const item = data[0];
+        $(`#${elementId}-count`).text(formatNumber(item.count));
+        $(`#${elementId}-date`).text(`as of ${formatDate(item.date)}`);
+        return item.count;
       } else {
         $(`#${elementId}-count`).text('No data');
         return 0;
       }
-    } catch (error) {
-      console.error(`Error fetching ${direction} data:`, error);
+    } catch (err) {
+      console.error(`Error fetching metric for ${elementId}:`, err);
       $(`#${elementId}-count`).text('Error');
       $(`#${elementId}-date`).text('Data unavailable');
       return 0;
     }
   }
 
-  // Fetch country data
-  async function fetchCountryData(direction) {
-    try {
-      const response = await fetch(`${API_BASE}${METRICS_ENDPOINT}?direction=${direction}&dimensions=country&limit=5`);
-      
-      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-      
-      const data = await response.json();
-      return data.data || [];
-    } catch (error) {
-      console.error(`Error fetching ${direction} country data:`, error);
-      return [];
-    }
-  }
-
-  // Render Pie Chart
-  async function renderPieChart(data, chartId) {
+  function renderPieChart(data, chartId, labelKey) {
     const ctx = document.getElementById(chartId).getContext('2d');
-    if (!ctx) {
-      console.error(`Chart container with ID ${chartId} not found!`);
-      return;
-    }
+    if (!ctx) return;
 
     new Chart(ctx, {
       type: 'doughnut',
       data: {
-        labels: data.map(item => item.country),
+        labels: data.map(item => item[labelKey] || 'Unknown'),
         datasets: [{
           data: data.map(item => item.count),
-          backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#FF9F40', '#4BC0C0'],
+          backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#FF9F40', '#4BC0C0']
         }]
       }
     });
   }
 
-  // Load pie chart data
-  async function loadPieCharts() {
-    try {
-      const roamInData = await fetchCountryData('totin');
-      if (roamInData && roamInData.length > 0) {
-        renderPieChart(roamInData, 'pieChartRoamIn');
-      } else {
-        console.error('No data found for Roam In Pie Chart');
-      }
+  function aggregateByField(historyData, field) {
+    const aggregated = {};
+    historyData.forEach(item => {
+      const key = item[field] || 'Unknown';
+      aggregated[key] = (aggregated[key] || 0) + item.count;
+    });
 
-      const roamOutData = await fetchCountryData('out');
-      if (roamOutData && roamOutData.length > 0) {
-        renderPieChart(roamOutData, 'pieChartRoamOut');
-      } else {
-        console.error('No data found for Roam Out Pie Chart');
-      }
-    } catch (error) {
-      console.error('Error loading pie chart data:', error);
+    return Object.entries(aggregated)
+      .map(([label, count]) => ({ [field]: label, count }))
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 5);
+  }
+
+  async function renderDoughnutCharts() {
+    try {
+      const [historyByCountry, historyByOperator] = await Promise.all([
+        fetchHistoryRoamInByCountry(),
+        fetchHistoryRoamInByOperator()
+      ]);
+
+      const topCountries = aggregateByField(historyByCountry, 'country');
+      const topOperators = aggregateByField(historyByOperator, 'operator');
+
+      renderPieChart(topCountries, 'pieChartRoamIn', 'country');
+      renderPieChart(topOperators, 'pieChartRoamOut', 'operator');
+    } catch (err) {
+      console.error('Error rendering doughnut charts:', err);
     }
   }
 
-  // Load all metrics and charts
   async function loadAllData() {
     try {
-      // Load historical chart
       await initHistoricalChart();
 
-      // Load metrics and progress bars
       const [roamInTotal, roamOutTotal] = await Promise.all([
-        fetchMetrics('totin', 'roam-in'),
-        fetchMetrics('out', 'roam-out')
+        fetchAndRenderMetric(fetchRoamInTotalGlobal, 'roam-in'),
+        fetchAndRenderMetric(fetchRoamOutGlobal, 'roam-out')
       ]);
-      
-      // Load pie charts for traffic by country
-      await loadPieCharts();
+
+      await renderDoughnutCharts();
 
       const [roamInCountries, roamOutCountries] = await Promise.all([
-        fetchCountryData('totin'),
-        fetchCountryData('out')
+        fetchTopRoamInByCountry(),
+        fetchTopRoamOutByCountry()
       ]);
-      
+
       createProgressBars('roam-in-progress-bars', roamInCountries, roamInTotal, 'totin');
       createProgressBars('roam-out-progress-bars', roamOutCountries, roamOutTotal, 'out');
-    } catch (error) {
-      console.error('Error loading data:', error);
+    } catch (err) {
+      console.error('Error loading all dashboard data:', err);
     }
   }
 
-  // Initial load
   loadAllData();
-
-  // Refresh every 5 minutes
-  setInterval(loadAllData, 300000);
+  setInterval(loadAllData, 300000); // Refresh every 5 minutes
 });
