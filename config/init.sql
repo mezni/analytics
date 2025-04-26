@@ -289,8 +289,8 @@ WHERE prefix_id IN (
     WHERE t.rn > 1
 );
 
-insert INTO sor_plan_config (country_id, operator_id, rate, routage)
-SELECT ope.country_id, ope.operator_id, fct.rate, fct.routage
+insert INTO sor_plan_config (country_id, operator_id, rate, routage, created_by)
+SELECT ope.country_id, ope.operator_id, fct.rate, fct.routage, fct.created_by
 from load_sor_plan fct JOIN countries ctn ON fct.country = ctn.common_name
 JOIN operators ope ON fct.operator = ope.operator
 WHERE ctn.country_id = ope.country_id;
