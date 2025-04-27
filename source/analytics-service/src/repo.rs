@@ -319,9 +319,6 @@ pub async fn insert_roam_out_metrics(db_client: &Client, corr_id: i32) -> Result
     Ok(())
 }
 
-
-
-
 pub async fn insert_roam_out_perfs(db_client: &Client, corr_id: i32) -> Result<(), AppError> {
     let query_global = "
         INSERT INTO roam_out_perf (date_id, batch_id, country_id, operator_id, country_count, operator_count, percent)
@@ -351,8 +348,7 @@ pub async fn insert_roam_out_perfs(db_client: &Client, corr_id: i32) -> Result<(
         .await
         .map_err(AppError::DatabaseError)?;
 
-
-        let query_notif = "
+    let query_notif = "
             INSERT INTO notifications (date_id, batch_id, rule_id, ref_id, message) 
             SELECT date_id, batch_id, rule_id, ref_id, 
                 '- ' || operator || ' ('|| common_name ||') config=' || perct_configure || ' reel=' || perct_reel 
@@ -368,13 +364,11 @@ pub async fn insert_roam_out_perfs(db_client: &Client, corr_id: i32) -> Result<(
         .await
         .map_err(AppError::DatabaseError)?;
 
-
     Ok(())
 }
 
 pub async fn cleanup_roam_out_stg(db_client: &Client, corr_id: i32) -> Result<(), AppError> {
-
-        let query = "
+    let query = "
             DELETE FROM stg_roam_out WHERE batch_id = $1 
     ";
 
@@ -383,22 +377,18 @@ pub async fn cleanup_roam_out_stg(db_client: &Client, corr_id: i32) -> Result<()
         .await
         .map_err(AppError::DatabaseError)?;
 
-
     Ok(())
 }
 
-
 pub async fn cleanup_roam_in_stg(db_client: &Client, corr_id: i32) -> Result<(), AppError> {
-
     let query = "
         DELETE FROM stg_roam_in WHERE batch_id = $1 
 ";
 
-db_client
-    .execute(query, &[&corr_id])
-    .await
-    .map_err(AppError::DatabaseError)?;
+    db_client
+        .execute(query, &[&corr_id])
+        .await
+        .map_err(AppError::DatabaseError)?;
 
-
-Ok(())
+    Ok(())
 }
