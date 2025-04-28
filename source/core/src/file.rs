@@ -74,10 +74,11 @@ impl FileManager {
     }
 
     pub async fn next(&self, app_config: AppConfig) -> Result<Option<FileProcessed>, AppError> {
+        println!("file enter");
         for source in app_config.sources {
             let source_type = source.source_type.to_uppercase();
             let path = Path::new(&source.source_directory);
-
+   
             if source_type == "ROAM_IN" || source_type == "ROAM_OUT" {
                 if path.exists() {
                     let mut files_vec: Vec<_> = fs::read_dir(&path)
@@ -85,7 +86,7 @@ impl FileManager {
                         .into_iter()
                         .flat_map(|read_dir| read_dir.flatten())
                         .collect();
-
+                    
                     if let Some(pattern) = &source.file_pattern {
                         if let Ok(regex) = Regex::new(pattern) {
                             files_vec.retain(|entry| {
@@ -100,7 +101,7 @@ impl FileManager {
                     }
 
                     files_vec.sort_by_key(|entry| entry.file_name());
-
+                    
                     if let Some(first_file) = files_vec.first() {
                         let post_action_upper = source
                             .post_action
@@ -122,7 +123,7 @@ impl FileManager {
                             file_action,
                             archive_path,
                         };
-
+                        println! ("file {:?}", file_processed);
                         return Ok(Some(file_processed));
                     }
                 }
